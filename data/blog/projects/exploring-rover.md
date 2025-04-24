@@ -2,7 +2,7 @@
 title: 'Exploring Rover'
 date: '2022-04-06'
 image: '/images/dora.png'
-tags: ['project', 'software', 'hardware', 'embedded', 'Python']
+tags: ['project', 'software', 'hardware']
 draft: false
 summary: 'Full-stack development for a exploring rover, using a raspberry pi, sensors, motors, and wheels'
 ---
