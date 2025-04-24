@@ -9,65 +9,67 @@ layout: PostLayout
 
 # SSH Workflow
 
-The current tools I have available to me at work are as follows:
+The current tools I use to work in a remote environment (i.e. work is done on servers) is as follows:
 
-1. Windows laptop
-2. Repos hosted on Github
-3. Workstations/Servers to do development work on
+1. Windows device
+2. [Git Bash](https://git-scm.com/downloads) as default terminal
+3. [VSCode](https://code.visualstudio.com/download) as code editor
 
-What is the most efficient way to do software development with these tools?
+## Setting up SSH Keys
 
-## SSH Keys
+The purpose of SSH keys is to enable passkey authentication, which is superior to password authentication, for SSH.
 
 ### Generation
 
+Replace the following email with your email
+
 ```bash
-ssh-keygen -t ed25519 -C "@gmail.com"
-# Usually spam enter for defaults is ok
+ssh-keygen -t ed25519 -C "myemail@gmail.com"
+# Usually spam enter for defaults is ok, which includes no password
 ```
 
-Note that improved algorithms may be introduced. Check the source for most update-to-date algorithms.
+Note: a single key should exist on each physical device (e.g. one for desktop, one for laptop). We are only providing the public key to outsiders (e.g. servers, Github). Thus, if our local device's private key is compromised, most likely all of the private keys will be compromised as well.
+
+Note: that improved key generation algorithms may be introduced. Check the below source for most update-to-date commands.
 
 [Source](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
 
 ### Adding to Github Account
 
-[Add to Github account](https://github.com/settings/keys)
+[Settings page of Github Account](https://github.com/settings/keys)
 
 [Source](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
 
-### SSH Connection
+### SSH Configuration
 
-Populate `~/.ssh/config` with information, an example can be as follows
+Populate `~/.ssh/config` with information. The `~` refers to the home directory of your local device (in my case Windows device). Here is example:
 
 ```
 Host nickname
   HostName 11.111.11.11
-  User kerrywang
+  User username
   ForwardAgent yes
   Identifyfile ~/.ssh/id_ecdsa
   ProxyJump loginnode
 
 Host loginnode
   HostName 11.111.11.12
-  User kerrywang
+  User username
   ForwardAgent yes
   Identifyfile ~/.ssh/id_ecdsa
 ```
 
 ### Copying SSH key to Servers
 
-This allows you to directly `ssh hostname` without needing extraneous authentication.
+This allows you to directly `ssh nickname` using your SSH keys instead of password.
 
-`ssh-copy-id username@remote-host-name-or-ip`
+`ssh-copy-id username@nickname`
 
 [Source](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server)
 
-Then use `ssh nickname` to ssh into a remote server, while also keeping an agent alive that allows you to interact with a Github repo.
-
 ### Auto SSH agent
 
-Add following to your `.bash_profile` (haven't tested long term yet).
+Add following to your `.bash_profile` to automatically create and add keys to an agent on creation of a terminal.
 
 ```bash
 SSH_ENV="$HOME/.ssh/agent-environment"
@@ -96,9 +98,13 @@ fi
 
 [Source](https://stackoverflow.com/a/18915067)
 
-## Development
+### Forwarding SSH Agents to VSCode Remote-SSH Remote Terminals
 
-### Shell Utility Function
+For some reason, when you open VSCode through the desktop application (e.g. start menu), ssh agents ENV variables are not passed to the VSCode instance, and thus do not exist in terminals opened on the remote. The workaround is to open VSCode from a terminal that has the SSH agent, in my case, usually Git Bash with `code` (with no other VSCode windows open). This will allow all VSCode terminals created from that session to have the proper agents created in `.bash_profile`.
+
+[Source](https://www.reddit.com/r/vscode/comments/18jakej/vscode_remotessh_refuses_to_use_sshagent_on_local/)
+
+### SSH Helper Function
 
 A shell utilty function that combines an ssh and `cd`ing into a directory can be done as follows
 
@@ -108,9 +114,13 @@ sshh() {
 }
 ```
 
+Execute with `sshh remote-name`.
+
+## Development
+
 ### Text Editing
 
-I like VSCode (+ Vim bindings) as my text editor.
+I like VSCode as my text editor.
 
 I use the [`Remote - SSH`](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) extension to attach a VSCode window to a remote SSH. Use `>Remote-SSH: Connect Current Window to Host` in VSCode.
 

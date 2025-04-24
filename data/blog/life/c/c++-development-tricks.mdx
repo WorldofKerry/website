@@ -1,11 +1,46 @@
 ---
-title: 'C++ Development Tricks'
+title: 'C/C++ Development Tricks'
 date: '2024-03-21T00:00:00-0800'
 tags: ['programming']
 draft: false
 summary: 'Tricks to speed up your C++ development workflow.'
 layout: PostLayout
 ---
+
+# C Development Tricks
+
+## Makefile
+```
+TARGET = prog
+LIBS = -lm
+CC = gcc
+CFLAGS = -O3 -g -Wall -Wextra -std=gnu2x -fsanitize=undefined -fsanitize=address
+# -fsanitize=address
+BUILD_DIR = build
+
+.PHONY: default all clean
+
+default: $(TARGET)
+all: default
+
+OBJECTS = $(patsubst %.c, $(BUILD_DIR)/%.o, $(wildcard *.c))
+HEADERS = $(wildcard *.h)
+
+$(BUILD_DIR)/%.o: %.c $(HEADERS) | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR):
+	mkdir -p $@
+
+.PRECIOUS: $(TARGET) $(OBJECTS)
+
+$(TARGET): $(OBJECTS)
+	$(CC) $^ $(CFLAGS) $(LIBS) -o $@
+
+clean:
+	-rm -rf $(BUILD_DIR)
+	-rm -f $(TARGET)
+```
 
 # C++ Development Tricks
 
@@ -18,3 +53,4 @@ With a bit of playing around, you may also be able to view the errors, error-by-
 ## VSCode: Debugging with LLDB/GDB
 
 Populating `./.vscode/launch.json` allows you to use the built-in debugging interface to debug code. This includes setting breakpoints in the source code using the VSCode window. Really handy once it's properly setup!
+
