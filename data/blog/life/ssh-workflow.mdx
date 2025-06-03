@@ -11,26 +11,22 @@ layout: PostSimple
 
 The current tools I use to work in a remote environment (i.e. work is done on servers) is as follows:
 
-1. Windows device
+1. Windows computer
 2. [Git Bash](https://git-scm.com/downloads) as default terminal
 3. [VSCode](https://code.visualstudio.com/download) as code editor
 
 ## Setting up SSH Keys
 
-The purpose of SSH keys is to enable passkey authentication, which is superior to password authentication, for SSH.
+SSH keys are used to avoid passwords.
 
 ### Generation
 
-Replace the following email with your email
-
 ```bash
 ssh-keygen"
-# Usually spam enter for defaults is ok, which includes no password
+# Spam enter for defaults
 ```
 
 Note: a single key should exist on each physical device (e.g. one for desktop, one for laptop). We are only providing the public key to outsiders (e.g. servers, Github). Thus, if our local device's private key is compromised, most likely all of the private keys will be compromised as well.
-
-Note: that improved key generation algorithms may be introduced. Check the below source for most update-to-date commands.
 
 [Source](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
 
@@ -61,7 +57,7 @@ More [configurations options](https://www.ssh.com/academy/ssh/config)
 
 This allows you to directly `ssh nickname` using your SSH keys instead of password.
 
-`ssh-copy-id username@nickname`
+`ssh-copy-id nickname`
 
 [Source](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server)
 
