@@ -45,10 +45,12 @@ Host short-nickname
   HostName 11.111.11.11
   ForwardAgent yes
   ProxyJump loginnode
+  IdentityFile ~/.ssh/id_ed25519
 
 Host loginnode
   HostName very-cool-name
   ForwardAgent yes
+  IdentityFile ~/.ssh/id_ed25519
 ```
 
 More [configurations options](https://www.ssh.com/academy/ssh/config)
