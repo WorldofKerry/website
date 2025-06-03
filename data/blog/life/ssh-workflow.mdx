@@ -24,7 +24,7 @@ The purpose of SSH keys is to enable passkey authentication, which is superior t
 Replace the following email with your email
 
 ```bash
-ssh-keygen -t ed25519 -C "myemail@gmail.com"
+ssh-keygen"
 # Usually spam enter for defaults is ok, which includes no password
 ```
 
@@ -42,22 +42,20 @@ Note: that improved key generation algorithms may be introduced. Check the below
 
 ### SSH Configuration
 
-Populate `~/.ssh/config` with information. The `~` refers to the home directory of your local device (in my case Windows device). Here is example:
+Populate `~/.ssh/config` with information. The `~` refers to the home directory of your local device (in my case Windows device). Here is example with a proxy jump:
 
 ```
-Host nickname
+Host short-nickname
   HostName 11.111.11.11
-  User username
   ForwardAgent yes
-  IdentityFile ~/.ssh/id_ecdsa
   ProxyJump loginnode
 
 Host loginnode
-  HostName 11.111.11.12
-  User username
+  HostName very-cool-name
   ForwardAgent yes
-  IdentityFile ~/.ssh/id_ecdsa
 ```
+
+More [configurations options](https://www.ssh.com/academy/ssh/config)
 
 ### Copying SSH key to Servers
 
